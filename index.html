@@ -160,6 +160,12 @@
             display: block;
         }
         
+        .audio-error {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
         .final-page {
             display: none;
         }
@@ -209,7 +215,7 @@
             {
                 title: "Enigma 1",
                 type: "image",
-                content: "https://www.meisterdrucke.pt/kunstwerke/1000px/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414677%29.jpg",
+                content: "https://www.meisterdrucke.pt/kunstwerke/1000px/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414677[...]",
                 answer: "1500"
             },
             {
@@ -221,7 +227,7 @@
             {
                 title: "Enigma 3",
                 type: "audio",
-                content: "https://raw.githubusercontent.com/ElGachone/shiny-doodle/main/morse.wav",
+                content: "morse.wav",
                 answer: "18081996"
             }
         ];
@@ -260,7 +266,17 @@
                 const audio = document.createElement('audio');
                 audio.id = 'enigmaAudio';
                 audio.controls = true;
+                audio.preload = "auto";
                 audio.src = enigma.content;
+                
+                // Error handling
+                audio.addEventListener('error', function() {
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'audio-error';
+                    errorMsg.textContent = 'Erro ao carregar o áudio. Certifique-se de que o arquivo morse.wav está no mesmo diretório que index.html';
+                    audioContainer.appendChild(errorMsg);
+                    console.error('Audio load error:', audio.error);
+                });
                 
                 audioContainer.appendChild(audio);
                 
@@ -270,14 +286,16 @@
                 const playBtn = document.createElement('button');
                 playBtn.className = 'audio-button';
                 playBtn.textContent = 'Reproduzir';
-                playBtn.onclick = () => audio.play();
+                playBtn.onclick = () => {
+                    audio.play().catch(err => console.error('Play error:', err));
+                };
                 
                 const replayBtn = document.createElement('button');
                 replayBtn.className = 'audio-button';
                 replayBtn.textContent = 'Repetir';
                 replayBtn.onclick = () => {
                     audio.currentTime = 0;
-                    audio.play();
+                    audio.play().catch(err => console.error('Play error:', err));
                 };
                 
                 controls.appendChild(playBtn);
