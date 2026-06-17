@@ -1,1 +1,251 @@
-<h1>Hello Everbody!</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enigmas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .title-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .title-page h1 {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        .enigma-page {
+            display: none;
+        }
+        
+        .enigma-page.active {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .enigma-page h2 {
+            font-size: 32px;
+        }
+        
+        .enigma-content {
+            width: 100%;
+        }
+        
+        .enigma-image {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        
+        .enigma-text {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+        
+        .answer-input {
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+            background: #2a2a2a;
+            color: #fff;
+        }
+        
+        .message {
+            font-size: 18px;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .message.correct {
+            background-color: #28a745;
+            color: white;
+            display: block;
+        }
+        
+        .message.incorrect {
+            background-color: #dc3545;
+            color: white;
+            display: block;
+        }
+        
+        .final-page {
+            display: none;
+        }
+        
+        .final-page.active {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        .final-page h1 {
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Página inicial -->
+        <div class="title-page" id="titlePage">
+            <h1>Você já sonhou com este homem?</h1>
+            <button onclick="startQuiz()">Começar</button>
+        </div>
+        
+        <!-- Página de enigmas -->
+        <div class="enigma-page" id="enigmaPage">
+            <h2 id="enigmaTitle">Enigma 1</h2>
+            <div class="enigma-content" id="enigmaContent"></div>
+            <input type="text" class="answer-input" id="answerInput" placeholder="Digite sua resposta">
+            <button onclick="checkAnswer()">Enviar Resposta</button>
+            <div class="message" id="message"></div>
+        </div>
+        
+        <!-- Página final -->
+        <div class="final-page" id="finalPage">
+            <h1>Parabéns! 🎉</h1>
+            <p style="font-size: 24px;">Você completou todos os enigmas!</p>
+            <button onclick="location.reload()">Começar de Novo</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentEnigma = 0;
+        
+        // Array com seus enigmas
+        const enigmas = [
+            {
+                title: "Enigma 1",
+                type: "image",
+                content: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/William_Blake_-_Jacob%27s_Ladder_-_Google_Art_Project.jpg/440px-William_Blake_-_Jacob%27s_Ladder_-_Google_Art_Project.jpg",
+                answer: "1500"
+            },
+            {
+                title: "Enigma 2",
+                type: "cipher",
+                content: "AOPQZK/YEAJPWBEYK/ZKO/OKJDJO",
+                answer: "onirologia"
+            }
+        ];
+        
+        function startQuiz() {
+            document.getElementById('titlePage').style.display = 'none';
+            document.getElementById('enigmaPage').classList.add('active');
+            loadEnigma(0);
+        }
+        
+        function loadEnigma(index) {
+            const enigma = enigmas[index];
+            document.getElementById('enigmaTitle').textContent = enigma.title;
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').focus();
+            
+            const content = document.getElementById('enigmaContent');
+            content.innerHTML = '';
+            
+            if (enigma.type === 'image') {
+                const img = document.createElement('img');
+                img.src = enigma.content;
+                img.alt = enigma.title;
+                img.className = 'enigma-image';
+                content.appendChild(img);
+            } else if (enigma.type === 'cipher') {
+                const cipherText = document.createElement('div');
+                cipherText.className = 'enigma-text';
+                cipherText.textContent = enigma.content;
+                content.appendChild(cipherText);
+            }
+        }
+        
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correct = enigmas[currentEnigma].answer.toLowerCase();
+            const messageEl = document.getElementById('message');
+            
+            if (userAnswer === correct) {
+                messageEl.textContent = 'Correto! 🎉';
+                messageEl.className = 'message correct';
+                
+                currentEnigma++;
+                if (currentEnigma < enigmas.length) {
+                    setTimeout(() => {
+                        loadEnigma(currentEnigma);
+                    }, 2000);
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('enigmaPage').classList.remove('active');
+                        document.getElementById('finalPage').classList.add('active');
+                    }, 2000);
+                }
+            } else {
+                messageEl.textContent = 'Errado! 😞 Tente novamente.';
+                messageEl.className = 'message incorrect';
+                document.getElementById('answerInput').value = '';
+            }
+        }
+        
+        // Permitir enviar resposta com Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answerInput').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
