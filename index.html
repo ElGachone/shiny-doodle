@@ -156,7 +156,7 @@
         
         <!-- Página final -->
         <div class="final-page" id="finalPage">
-            <h1>Parabéns! 🎉</h1>
+            <h1>Parabéns!</h1>
             <p style="font-size: 24px;">Você completou todos os enigmas!</p>
             <button onclick="location.reload()">Começar de Novo</button>
         </div>
@@ -168,13 +168,13 @@
         // Array com seus enigmas
         const enigmas = [
             {
-                title: "Enigma 1",
+                title: "1'",
                 type: "image",
-                content: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/William_Blake_-_Jacob%27s_Ladder_-_Google_Art_Project.jpg/440px-William_Blake_-_Jacob%27s_Ladder_-_Google_Art_Project.jpg",
+                content: "https://www.meisterdrucke.pt/kunstwerke/1000px/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414677%29.jpg",
                 answer: "1500"
             },
             {
-                title: "Enigma 2",
+                title: "2",
                 type: "cipher",
                 content: "AOPQZK/YEAJPWBEYK/ZKO/OKJDJO",
                 answer: "onirologia"
@@ -217,7 +217,7 @@
             const messageEl = document.getElementById('message');
             
             if (userAnswer === correct) {
-                messageEl.textContent = 'Correto! 🎉';
+                messageEl.textContent = 'Correto!';
                 messageEl.className = 'message correct';
                 
                 currentEnigma++;
@@ -232,7 +232,7 @@
                     }, 2000);
                 }
             } else {
-                messageEl.textContent = 'Errado! 😞 Tente novamente.';
+                messageEl.textContent = 'Errado! Tente novamente.';
                 messageEl.className = 'message incorrect';
                 document.getElementById('answerInput').value = '';
             }
