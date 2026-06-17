@@ -90,6 +90,45 @@
             border-radius: 10px;
         }
         
+        .enigma-audio {
+            margin: 20px 0;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .enigma-audio audio {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+        
+        .audio-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .audio-button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .audio-button:hover {
+            background-color: #5a6268;
+        }
+        
         .answer-input {
             padding: 12px;
             font-size: 16px;
@@ -168,16 +207,22 @@
         // Array com seus enigmas
         const enigmas = [
             {
-                title: "1'",
+                title: "Enigma 1",
                 type: "image",
-                content: "https://www.meisterdrucke.pt/kunstwerke/1000px/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414677%29.jpg",
+                content: "https://www.meisterdrucke.pt/kunstwerke/1000px/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414677[...]",
                 answer: "1500"
             },
             {
-                title: "2",
+                title: "Enigma 2",
                 type: "cipher",
                 content: "AOPQZK/YEAJPWBEYK/ZKO/OKJDJO",
                 answer: "onirologia"
+            },
+            {
+                title: "Enigma 3",
+                type: "audio",
+                content: "https://raw.githubusercontent.com/ElGachone/shiny-doodle/main/morse.wav",
+                answer: "18081996"
             }
         ];
         
@@ -208,6 +253,38 @@
                 cipherText.className = 'enigma-text';
                 cipherText.textContent = enigma.content;
                 content.appendChild(cipherText);
+            } else if (enigma.type === 'audio') {
+                const audioContainer = document.createElement('div');
+                audioContainer.className = 'enigma-audio';
+                
+                const audio = document.createElement('audio');
+                audio.id = 'enigmaAudio';
+                audio.controls = true;
+                audio.src = enigma.content;
+                
+                audioContainer.appendChild(audio);
+                
+                const controls = document.createElement('div');
+                controls.className = 'audio-controls';
+                
+                const playBtn = document.createElement('button');
+                playBtn.className = 'audio-button';
+                playBtn.textContent = 'Reproduzir';
+                playBtn.onclick = () => audio.play();
+                
+                const replayBtn = document.createElement('button');
+                replayBtn.className = 'audio-button';
+                replayBtn.textContent = 'Repetir';
+                replayBtn.onclick = () => {
+                    audio.currentTime = 0;
+                    audio.play();
+                };
+                
+                controls.appendChild(playBtn);
+                controls.appendChild(replayBtn);
+                
+                audioContainer.appendChild(controls);
+                content.appendChild(audioContainer);
             }
         }
         
