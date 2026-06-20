@@ -56,6 +56,10 @@
             background-color: #0056b3;
         }
         
+        .title-page.hidden {
+            display: none;
+        }
+        
         .enigma-page {
             display: none;
         }
@@ -202,7 +206,7 @@
             {
                 title: "Enigma 1",
                 type: "image",
-                content: "https://www.meisterdrucke.uk/kunstwerke/400w/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414%29.jpg",
+                content: "https://www.meisterdrucke.uk/kunstwerke/400w/Nicolas_Dipre_-_The_dream_of_Jacob_ca_1500_by_Nicolas_Dipre_%28active_ca_1495-1532%29_oil_on_panel_t_-_%28MeisterDrucke-1414%29.j[...]",
                 answer: "1500"
             },
             {
@@ -220,7 +224,7 @@
         ];
         
         function startQuiz() {
-            document.getElementById('titlePage').style.display = 'none';
+            document.getElementById('titlePage').classList.add('hidden');
             document.getElementById('enigmaPage').classList.add('active');
             loadEnigma(0);
         }
